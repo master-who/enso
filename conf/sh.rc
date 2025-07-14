@@ -1,0 +1,9 @@
+alias cen='cd /var/www/enso/; source venv/bin/activate';
+
+alias sys='sudo systemctl'
+alias sys_reload='sudo systemctl daemon-reload'
+alias start_enso='sudo systemctl start enso'
+alias stop_enso='sudo systemctl stop enso'
+alias journal_enso='sudo journalctl -u enso -f'
+
+alias enlogs="cen; tail -f /var/www/enso/logs/*"
