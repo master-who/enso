@@ -1,10 +1,10 @@
 from flask import Flask, jsonify
 
-app = Flask(__name__)
+api = Flask(__name__)
 
-@app.route('/')
+@api.route('/')
 def home():
     return jsonify({"message": "Welcome to the Enso API!"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    api.run(debug=True)
