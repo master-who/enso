@@ -23,10 +23,12 @@ cd ~/dotrc
 ./install.sh  # Or follow your dotrc setup instructions
 ```
 
-### 5. Clone the Flask API Repository
+### 5. Clone the Flask API Repository to `/var/www/enso/`
 ```sh
-git clone https://github.com/master-who/enso.git ~/enso
-cd ~/enso
+sudo mkdir -p /var/www/enso
+sudo chown $USER:$USER /var/www/enso
+git clone https://github.com/master-who/enso.git /var/www/enso
+cd /var/www/enso
 ```
 
 ### 6. Set Up Python Virtual Environment
@@ -82,43 +84,38 @@ sudo certbot --nginx -d enso.masterwho.in
 ```
 - Follow prompts to enable HTTPS.
 
-### 11. Set Up Gunicorn as a Systemd Service
-- Create `/etc/systemd/system/enso.service`:
-    ```ini
-    [Unit]
-    Description=Gunicorn instance to serve Enso API
-    After=network.target
+### 11. Set Up Supervisor (in Virtualenv) as a Systemd Service
 
-    [Service]
-    User=<your-username>
-    Group=www-data
-    WorkingDirectory=/home/<your-username>/enso/src/api
-    Environment="PATH=/home/<your-username>/enso/venv/bin"
-    ExecStart=/home/<your-username>/enso/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 api:api
+- The Supervisor configuration is located at `/var/www/enso/conf/supervisord.conf` and is set up to manage Gunicorn.
+- The systemd service file for Supervisor is at `/var/www/enso/conf/enso.service`.
 
-    [Install]
-    WantedBy=multi-user.target
-    ```
-- Reload systemd and start Gunicorn:
-    ```sh
-    sudo systemctl daemon-reload
-    sudo systemctl start enso
-    sudo systemctl enable enso
-    sudo systemctl status enso
-    ```
-
-### 5. Clone the Flask API Repository
 ```sh
-git clone https://github.com/master-who/enso.git ~/enso
-cd ~/enso
+# Link the systemd service file
+sudo ln -s /var/www/enso/conf/enso.service /etc/systemd/system/enso.service
+
+# Reload systemd to recognize the new service
+sudo systemctl daemon-reload
+
+# Enable the service to start on boot
+sudo systemctl enable enso
+
+# Start the Supervisor service
+sudo systemctl start enso
+
+# (Optional) Stop the service
+sudo systemctl stop enso
+
+# Check the status of the service
+sudo systemctl status enso
+
+# Check systemd logs for the Supervisor-managed Gunicorn service
+sudo journalctl -u enso
+
+# Check Supervisor logs (paths may vary based on your supervisord.conf)
+tail -f /var/www/enso/logs/supervisord.log
+
+# Check Nginx error logs
+sudo tail -f /var/log/nginx/error.log
 ```
 
-### 12. Verify Deployment
-- Visit `https://enso.masterwho.in` in your browser.
-- Check logs for errors:
-    ```sh
-    sudo journalctl -u enso
-    sudo tail -f /var/log/nginx/error.log
-    ```
-
-**Your Flask API server should now be running securely behind Nginx with Gunicorn in a virtual environment.**
+**Your Flask API server should now be running securely behind Nginx, with Gunicorn managed by Supervisor (running as a systemd service) in a virtual environment.**

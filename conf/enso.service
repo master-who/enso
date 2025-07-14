@@ -1,0 +1,18 @@
+[Unit]
+Description=Enso Supervisor
+After=network.target
+
+[Service]
+Type=forking
+User=who
+Group=who
+WorkingDirectory=/var/www/enso/
+Environment=PATH=/var/www/enso/venv/bin
+Environment=ENSO_ROOT=/var/www/enso/
+Environment=USER=who
+ExecStart=/var/www/enso/venv/bin/supervisord -c /var/www/enso/conf/supervisord.conf
+ExecStop=/var/www/enso/venv/bin/supervisorctl -c /var/www/enso/conf/supervisord.conf shutdown
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
