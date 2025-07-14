@@ -10,11 +10,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to Enso</h1>
+        <h1>Welcome to Enso 1.8</h1>
         <button id="installBtn" class="button" style="display: none;">Install App</button>
         <button id="notifyBtn" class="button">Enable Notifications</button>
         <button id="subscribeBtn" class="button" style="display: none;">Subscribe to Updates</button>
         <div id="status" class="status"></div>
+	<div id="message"></div>
     </div>
 
     <script>
@@ -26,7 +27,7 @@
 
         // Service Worker Registration
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/static/sw.js')
+            navigator.serviceWorker.register('/sw.js')
                 .then(registration => {
                     console.log('ServiceWorker registration successful');
                 })
@@ -79,8 +80,11 @@
                     applicationServerKey: 'BEN-2Rj9GEAYkcZiCHaqEjhuwtIhiMo7EOmTysiVaUk18tqKIV7fn_gK67BzXdBvKNFFWdmzlf5gpkiX3so0bQ4'
                 });
 
+		status.textContent = JSON.stringify(subscription);
+		return;
+
                 // Send subscription to server
-                const response = await fetch('/api/subscribe', {
+                const response = await fetch('/subscribe', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

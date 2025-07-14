@@ -12,5 +12,9 @@ def home():
 def manifest():
     return send_from_directory('templates', 'manifest.json')
 
+@api.route('/sw.js')
+def service_worker():
+    return send_from_directory('static', 'sw.js')
+
 if __name__ == '__main__':
     api.run(debug=True)
