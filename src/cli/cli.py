@@ -1,43 +1,26 @@
 import click
-from pywebpush import webpush, WebPushException
+from . import notify
 
 @click.group()
-def cli():
+def enso():
     """A simple CLI tool."""
     pass
 
 
-@cli.command()
-@click.option('--endpoint', prompt='Endpoint URL', help='The push service endpoint URL')
-@click.option('--p256dh', prompt='User public key (p256dh)', help='User public key')
-@click.option('--auth', prompt='User auth secret', help='User auth secret')
-@click.option('--message', prompt='Notification message', help='Message to send')
-def send_push(endpoint, p256dh, auth, message):
-    """Sends a web push notification to a user."""
-    VAPID_PRIVATE_KEY = "1YvkmFA5p31EK31c6GYQ79Ev__ozsoGOJNBmdMomIp8"
-    VAPID_CLAIMS = {
-        "sub": "mailto:admin@example.com"
-    }
-
-    subscription_info = {
-        "endpoint": endpoint,
-        "keys": {
-            "p256dh": p256dh,
-            "auth": auth
+@enso.command()
+@click.argument('message')
+def push(message):
+    subscription = {
+        'endpoint': 'https://fcm.googleapis.com/fcm/send/cfzwE1V4jlM:APA91bEuOi4Bv_W4Ahg3713nfqJ06VHRkf5ktrnyog5PCYXW3Fs1efiML5EF2pBi0Kne41raeNrNtAPoksxTYGRmbu4GY0-B8fZSn1eE7Cv30r3pOJVq4OPgObvJyxiujywvCndMUiNP',
+        'expirationTime': None,
+        'keys': {
+            'p256dh': 'BM9QAEApa_vRxebni7Ok8WnZmCA_WChADMx45OL_46v7BZYRBmT4rQjxOxnAFEH1ZGMm1YBfD4nQr97e4gfdYpM',
+            'auth': 'l-Db4nt0J6mewzFjBEq0NQ'
         }
     }
 
-    try:
-        webpush(
-            subscription_info,
-            data=message,
-            vapid_private_key=VAPID_PRIVATE_KEY,
-            vapid_claims=VAPID_CLAIMS
-        )
-        click.echo("Notification sent successfully!")
-    except WebPushException as ex:
-        click.echo(f"Failed to send notification: {ex}")
+    notify.push_message(subscription, message)
 
 
 if __name__ == "__main__":
-    cli()
+    enso()
