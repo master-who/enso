@@ -4,7 +4,7 @@ import requests
 import json
 from datetime import datetime
 
-from lib import notify
+import notify
 
 url = "https://json.freeastrologyapi.com/tithi-durations"
 api_key = "uR2DuV2dxH7Quh48uBjf11TAGP2ZTkSc3xBf1nbg"

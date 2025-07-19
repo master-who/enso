@@ -3,7 +3,10 @@ from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.date import DateTrigger
-from ..lib import tithi
+
+import os,sys
+sys.path.append(os.path.abspath('../lib'))
+import tithi
 
 # Setup scheduler
 scheduler = BackgroundScheduler()
