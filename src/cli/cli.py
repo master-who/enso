@@ -1,5 +1,5 @@
 import click
-from . import notify
+from ..lib import notify
 
 @click.group()
 def enso():

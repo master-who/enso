@@ -3,12 +3,10 @@ from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.date import DateTrigger
+from ..lib import tithi
 
 # Setup scheduler
 scheduler = BackgroundScheduler()
-
-def notify_user(schedule):
-    print(f"[{datetime.now()}] Triggered: {schedule['name']} ({schedule['id']})")
 
 def schedule_from_object(schedule):
     if not schedule.get("enabled", True):
@@ -27,7 +25,7 @@ def schedule_from_object(schedule):
             minute=int(anchor["time"].split(":")[1]),
         )
         scheduler.add_job(
-            notify_user,
+            tithi.notify_today,
             trigger=DateTrigger(run_date=dt),
             id=job_id,
             name=job_name,
@@ -40,7 +38,7 @@ def schedule_from_object(schedule):
         days_cron = ",".join(day[:3].lower() for day in days) if days else "*"
         hour, minute = map(int, anchor["time"].split(":"))
         scheduler.add_job(
-            notify_user,
+            tithi.notify_today,
             trigger=CronTrigger(day_of_week=days_cron, hour=hour, minute=minute),
             id=job_id,
             name=job_name,
