@@ -40,6 +40,8 @@ def schedule_from_object(schedule):
         days = anchor.get("daysOfWeek", [])
         days_cron = ",".join(day[:3].lower() for day in days) if days else "*"
         hour, minute = map(int, anchor["time"].split(":"))
+        print(f"Scheduling {job_name} at {hour:02}:{minute:02} on {days_cron}")
+
         scheduler.add_job(
             tithi.notify_today,
             trigger=CronTrigger(day_of_week=days_cron, hour=hour, minute=minute),
