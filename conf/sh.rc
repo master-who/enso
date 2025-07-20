@@ -4,6 +4,9 @@ alias sys='sudo systemctl'
 alias sys_reload='sudo systemctl daemon-reload'
 alias start_enso='sudo systemctl start enso'
 alias stop_enso='sudo systemctl stop enso'
+alias renso='stop_enso; start_enso'
 alias journal_enso='sudo journalctl -u enso -f'
+alias ensoctl='cen; supervisorctl -c conf/supervisord.conf'
+
 
 alias enlogs="cen; tail -f /var/www/enso/logs/*"
