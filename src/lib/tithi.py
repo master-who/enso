@@ -14,6 +14,7 @@ subscriptions = [
 
 def notify_today(schedule):
     now = datetime.now()
+    print(f"Daily Tithi @ {now.strftime('%Y-%m-%d %H:%M:%S')}")
 
     payload = json.dumps({
         "year": now.year,
@@ -49,6 +50,7 @@ def notify_today(schedule):
     """
 
     data = json.loads(response.json()['output'])
+    print(f"Current Tithi: {data['name']} ({data['number']})")
 
     completion_time = datetime.strptime(data['completes_at'], '%Y-%m-%d %H:%M:%S')
     formatted_time = completion_time.strftime('%I:%M %p - %B %d')
@@ -57,3 +59,4 @@ def notify_today(schedule):
 
     for s in subscriptions:
         notify.push_message(s, message)
+        print(f"Notification sent: {message}")

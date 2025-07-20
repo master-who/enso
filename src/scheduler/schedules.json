@@ -4,7 +4,7 @@
     "name": "Every Morning",
     "type": "recurring",
     "anchor": {
-      "time": "07:00"
+      "time": "07:15"
     },
     "enabled": true,
     "action": {
