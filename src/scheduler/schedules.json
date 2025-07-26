@@ -4,10 +4,33 @@
     "name": "Every Morning",
     "type": "recurring",
     "anchor": {
-      "time": "07:15"
+      "time": "6:00"
+    },
+    "enabled": true,
+    "action": {
+    }
+  },
+  {
+    "id": "tithi2",
+    "name": "Every Afternoon",
+    "type": "recurring",
+    "anchor": {
+      "time": "12:00"
+    },
+    "enabled": true,
+    "action": {
+    }
+  },
+  {
+    "id": "tithi3",
+    "name": "Every Evening",
+    "type": "recurring",
+    "anchor": {
+      "time": "18:00"
     },
     "enabled": true,
     "action": {
     }
   }
+
 ]
