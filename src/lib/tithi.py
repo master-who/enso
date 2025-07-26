@@ -4,7 +4,10 @@ import requests
 import json
 from datetime import datetime
 from pathlib import Path
-from . import notify
+
+import sys
+sys.path.append(str(Path(__file__).parent / "lib"))
+import notify
 
 # Constants
 url = "https://json.freeastrologyapi.com/tithi-durations"
