@@ -4,16 +4,13 @@ import requests
 import json
 from datetime import datetime
 from pathlib import Path
-
-import notify
+from . import notify
 
 # Constants
 url = "https://json.freeastrologyapi.com/tithi-durations"
 TODAY_JSON = Path(__file__).parent / "today.json"
 api_key = "uR2DuV2dxH7Quh48uBjf11TAGP2ZTkSc3xBf1nbg"
-subscriptions = [
-    {'endpoint': 'https://fcm.googleapis.com/fcm/send/cfzwE1V4jlM:APA91bEuOi4Bv_W4Ahg3713nfqJ06VHRkf5ktrnyog5PCYXW3Fs1efiML5EF2pBi0Kne41raeNrNtAPoksxTYGRmbu4GY0-B8fZSn1eE7Cv30r3pOJVq4OPgObvJyxiujywvCndMUiNP', 'expirationTime': None, 'keys': {'p256dh': 'BM9QAEApa_vRxebni7Ok8WnZmCA_WChADMx45OL_46v7BZYRBmT4rQjxOxnAFEH1ZGMm1YBfD4nQr97e4gfdYpM', 'auth': 'l-Db4nt0J6mewzFjBEq0NQ'}}
-]
+
 
 def fetch_current_tithi():
     """Fetch current tithi from the API"""
@@ -49,6 +46,7 @@ def fetch_current_tithi():
         "till": data['completes_at']
     }
 
+
 def load_cached_tithi():
     """Load cached tithi from today.json"""
     try:
@@ -63,6 +61,7 @@ def load_cached_tithi():
     except (json.JSONDecodeError, KeyError, ValueError):
         return None
 
+
 def save_tithi_cache(tithi_data):
     """Save tithi data to today.json"""
     # Ensure till is string for JSON serialization
@@ -71,6 +70,7 @@ def save_tithi_cache(tithi_data):
     
     with open(TODAY_JSON, 'w') as f:
         json.dump(tithi_data, f, indent=2)
+
 
 def get_today_tithi():
     """
@@ -93,6 +93,7 @@ def get_today_tithi():
     save_tithi_cache(tithi_data)
     return tithi_data
 
+
 def format_tithi_message(tithi_data):
     """Format a tithi notification message"""
     completion_time = (
@@ -103,6 +104,7 @@ def format_tithi_message(tithi_data):
     formatted_time = completion_time.strftime('%I:%M %p - %B %d')
     return f"{tithi_data['tithi']} till {formatted_time}"
 
+
 def notify_today(schedule):
     """Send push notifications about today's tithi"""
     now = datetime.now()
@@ -112,6 +114,5 @@ def notify_today(schedule):
     message = format_tithi_message(tithi_data)
 
     # Send notifications
-    for s in subscriptions:
-        notify.push_message(s, message)
-        print(f"Notification sent: {message}")
+    sent_count = notify.push('tithi', message)
+    print(f"Notifications sent: {sent_count}")

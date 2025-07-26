@@ -15,8 +15,9 @@
 
 # Refactor subscriptions out of `tithi.py`
 
-
+- Restrict all changes to `/src/lib`. DO NOT change anything in the `src/api` or `src/cli`
 - `lib/subscriptions.json` should have a `tithi` key. Its value should be a list of subscription objects. The `subscription` defined in `tithi.py` should be moved under the `tithi` key in `subscriptions.json`
 - `notify.py` should have another `push(key, message)` which sends `message` to all subscriptions listed in `subscriptions.json` under `key`.
 - `tithi.py` should just call `notify.push('tithi', message)`
-- The 
+- If `subscriptions.json` does not exist when `notify.py` tries to access it, the file should be created with `{}`
+
