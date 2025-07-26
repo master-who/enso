@@ -13,7 +13,7 @@
         <h1>Welcome to Enso 1.8</h1>
         <button id="installBtn" class="button" style="display: none;">Install App</button>
         <button id="notifyBtn" class="button">Enable Notifications</button>
-        <button id="subscribeBtn" class="button" style="display: none;">Subscribe to Updates</button>
+        <button id="subscribeBtn" class="button" style="display: none;">Subscribe to Tithi</button>
         <div id="status" class="status"></div>
 	<div id="message"></div>
     </div>
@@ -83,7 +83,7 @@
 		status.textContent = JSON.stringify(subscription);
 
                 // Send subscription to server
-                const response = await fetch('/subscribe', {
+                const response = await fetch('/subscriptions/tithi/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

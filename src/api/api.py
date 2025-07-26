@@ -1,7 +1,13 @@
 from flask import Flask, jsonify, send_from_directory
 from flask import render_template
 import os
+import sys
+from pathlib import Path
 from flask import request
+
+# Add lib directory to path for notify import
+sys.path.append(str(Path(__file__).parent.parent / "lib"))
+import notify
 
 api = Flask(__name__)
 
@@ -17,13 +23,18 @@ def manifest():
 def service_worker():
     return send_from_directory('static', 'sw.js')
 
-@api.route('/subscribe', methods=['POST'])
-def subscribe():
+@api.route('/subscriptions/<thread>/', methods=['POST'])
+def subscribe(thread):
     data = request.get_json()
-    save_path = os.path.join('subscription.json')
-    with open(save_path, 'w', encoding='utf-8') as f:
-        f.write(f"{data}\n")
-    return jsonify({'status': 'success'}), 201
+
+    # Try to add subscription
+    success, message = notify.subscribe(thread, data)
+    if not success:
+        if message.endswith("is not supported"):
+            return jsonify({'error': message}), 404
+        return jsonify({'error': message}), 400
+
+    return jsonify({'status': 'success', 'message': message}), 201
 
 if __name__ == '__main__':
     api.run(debug=True)
