@@ -30,6 +30,7 @@ def subscribe(thread):
     # Try to add subscription
     success, message = notify.subscribe(thread, data)
     if not success:
+        print('Error:', message)
         if message.endswith("is not supported"):
             return jsonify({'error': message}), 404
         return jsonify({'error': message}), 400
@@ -37,4 +38,4 @@ def subscribe(thread):
     return jsonify({'status': 'success', 'message': message}), 201
 
 if __name__ == '__main__':
-    api.run(debug=True)
+   api.run(debug=True)

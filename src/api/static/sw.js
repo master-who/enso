@@ -1,6 +1,6 @@
 // Service Worker
 const CACHE_NAME = 'enso-v1';
-const CACHE_VERSION = 'v1.2';
+const CACHE_VERSION = 'v1.94';
 const urlsToCache = [
   '/',
   '/static/styles.css',
